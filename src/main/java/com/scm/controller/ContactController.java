@@ -4,6 +4,7 @@ package com.scm.controller;
 import com.scm.entities.Contact;
 import com.scm.entities.User;
 import com.scm.forms.ContactForm;
+import com.scm.helper.AppConstants;
 import com.scm.helper.Helper;
 import com.scm.helper.Message;
 import com.scm.helper.MessageType;
@@ -14,15 +15,14 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -80,4 +80,26 @@ public class ContactController {
 
         return "redirect:/user/contact/add";
     }
+    @RequestMapping
+    public String viewContact(@RequestParam(value = "page",defaultValue = "0") int page,@RequestParam(value = "size",defaultValue = AppConstants.PAGE_SIZE+"") int size,@RequestParam(value = "sortBy",defaultValue = "name") String sortBy,
+                              @RequestParam (value = "direction",defaultValue = "asc") String direction,Authentication authentication, Model model)
+    {
+        String username=Helper.getEmailOfLoggedInUser(authentication);
+        User user=userService.getUserByEmail(username);
+        Page<Contact> PageContact=contactService.getByUser(user,page,size,sortBy,direction);
+        model.addAttribute("PageContact",PageContact);
+        model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
+        PageContact.getNumber();
+
+        return "user/contact";
+    }
+
+    //search handler
+    @RequestMapping("/search")
+    public String searchHandler(@RequestParam("field") String field,@RequestParam("keyword") String keyword,Authentication authentication, Model model)
+    {
+
+        return "user/search";
+    }
+
 }
