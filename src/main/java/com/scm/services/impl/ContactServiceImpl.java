@@ -8,7 +8,6 @@ import com.scm.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +38,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact getContactById(String id) {
-        return contactRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("contact Not Found with given id"+id));
+        return contactRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("contact Not Found with given id" +id));
     }
 
     @Override
@@ -49,9 +48,28 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> searchContact(String name, String email, String phone) {
-        return List.of();
+    public Page<Contact> searchByName(String nameKeyword, int size, int page, String sortBy, String order, User user) {
+
+        Sort sort=order.equals("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
+        var pageable=PageRequest.of(page, size,sort);
+        return contactRepo.findByUserAndNameContaining(user,nameKeyword,pageable);
+
     }
+
+    @Override
+    public Page<Contact> searchByPhoneNumber(String phoneNumberKeyword, int size, int page, String sortBy, String order, User user) {
+        Sort sort=order.equals("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
+        var pageable=PageRequest.of(page, size,sort);
+        return contactRepo.findByUserAndPhoneNumberContaining(user,phoneNumberKeyword,pageable);
+    }
+
+    @Override
+    public Page<Contact> searchByEmail(String emailKeyword, int size, int page, String sortBy, String order, User user) {
+        Sort sort=order.equals("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
+        var pageable=PageRequest.of(page, size,sort);
+        return contactRepo.findByUserAndEmailContaining(user,emailKeyword,pageable);
+    }
+
 
     @Override
     public List<Contact> getByUserid(String userid) {

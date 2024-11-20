@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{base::parent(~{::#content},~{::title},~{::script})}">
+<html lang="en" th:replace="~{base::parent(~{::#content},~{::title},~{::script})}" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Contacts</title>
 </head>
@@ -16,30 +16,30 @@
 
 
         <div class="relative  overflow-x-auto shadow-md sm:rounded-lg">
-         <form action="#" data-th-action="@{'/user/contact/search'}">
+         <form data-th-object="${ContactSearchForm}" data-th-action="@{'/user/contact/search'}">
            <div class="flex  space-x-3 p-5 items-center justify-start flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
              <div>
 
-               <select name="field" id="countries_disabled" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                 <option selected>Select field</option>
+               <select  data-th-field="*{field}" name="field" id="countries_disabled" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                 <option selected value="">Select field</option>
                  <option value="name">Name</option>
                  <option value="phone">Phone</option>
                  <option value="email">Email</option>
                </select>
              </div>
-             <label for="table-search" class="sr-only">Search</label>
+             <label class="sr-only">Search</label>
              <div class="relative">
                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
                  <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                  </svg>
                </div>
-               <input name="keyword" type="text" id="table-search-users" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for users">
+               <input data-th-field="*{value}"  type="text" id="table-search-users" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for users">
              </div>
              <button type="submit" class="px-3 py-2 bg-blue-700 hover:bg-blue-800 dark:bg-gray-700 dark:hover:bg-gray-800 text-white  rounded">Search</button>
            </div>
          </form>
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <table data-th-if="${PageContact.totalElements>0}" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
 
@@ -86,14 +86,14 @@
                 <div>
                   <a><i class="fa-solid w-4 h-4 fa-trash"></i></a>
                   <a> <i class="fa-solid w-4 h-4 fa-pen-to-square"></i></a>
-                  <a><i class="fa-regular w-4 h-4 fa-eye"></i></a>
+                  <button th:onclick="loadContactdata([[${c.id}]])"><i class="fa-regular w-4 h-4 fa-eye"></i></button>
                 </div>
               </td>
             </tr>
 
             </tbody>
           </table>
-          <div class="pagination_container p-4 text-center dark:bg-gray-700 bg-white">
+          <div data-th-if="${PageContact.totalElements>0}" class="pagination_container p-4 text-center dark:bg-gray-700 bg-white">
             <nav aria-label="Page navigation example">
               <ul class="inline-flex -space-x-px text-base h-10">
                 <li data-th-unless="${PageContact.first}">
@@ -108,13 +108,17 @@
               </ul>
             </nav>
           </div>
+          <h1 class="text-5xl text-center bg-white p-4 text-red-600 " data-th-unless="${PageContact.totalElements>0}">No Result found</h1>
         </div>
       </div>
     </div>
+    <div data-th-replace="~{user/contact_modals::contactModal}"></div>
   </div>
+
 </div>
+<script data-th-src="@{'/js/contacts.js'}"></script>
 <script>
-  console.log("this is Dashboard page");
+  console.log("this is Contact page");
 </script>
 </body>
 </html>

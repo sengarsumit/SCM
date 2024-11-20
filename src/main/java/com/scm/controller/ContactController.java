@@ -4,6 +4,7 @@ package com.scm.controller;
 import com.scm.entities.Contact;
 import com.scm.entities.User;
 import com.scm.forms.ContactForm;
+import com.scm.forms.ContactSearchForm;
 import com.scm.helper.AppConstants;
 import com.scm.helper.Helper;
 import com.scm.helper.Message;
@@ -90,15 +91,34 @@ public class ContactController {
         model.addAttribute("PageContact",PageContact);
         model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
         PageContact.getNumber();
+        model.addAttribute("ContactSearchForm",new ContactSearchForm());
 
         return "user/contact";
     }
 
     //search handler
     @RequestMapping("/search")
-    public String searchHandler(@RequestParam("field") String field,@RequestParam("keyword") String keyword,Authentication authentication, Model model)
+    public String searchHandler(@ModelAttribute ContactSearchForm contactSearchForm, @RequestParam(value = "size",defaultValue = AppConstants.PAGE_SIZE+"")int size,
+                                @RequestParam(value = "page",defaultValue = "0")int page, @RequestParam(value = "sortBy",defaultValue = "name") String sortBy, @RequestParam(value = "direction",defaultValue = "asc") String direction, Model model, Authentication authentication)
     {
 
+        var user=userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
+        Page<Contact> pageContact=null;
+        if(contactSearchForm.getField().equalsIgnoreCase("name"))
+        {
+        pageContact= contactService.searchByName(contactSearchForm.getValue(),size,page,sortBy,direction,user);
+        }
+        else if(contactSearchForm.getField().equalsIgnoreCase("email"))
+        {
+            pageContact=contactService.searchByEmail(contactSearchForm.getValue(),size,page,sortBy,direction,user);
+        }
+        else if(contactSearchForm.getField().equalsIgnoreCase("phone"))
+        {
+            pageContact=contactService.searchByPhoneNumber(contactSearchForm.getValue(),size,page,sortBy,direction,user);
+        }
+        model.addAttribute("PageContact",pageContact);
+        model.addAttribute("ContactSearchForm", contactSearchForm);
+        model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
         return "user/search";
     }
 
