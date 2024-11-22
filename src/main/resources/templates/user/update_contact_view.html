@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" th:replace="~{base::parent(~{::#content},~{::title},~{::script})}">
 <head>
-    <title>Add Contact</title>
+    <title>Update Contact</title>
 </head>
 <body>
 <div id="content" >
@@ -14,9 +14,9 @@
             <div class="col-span-12 md:col-span-6">
                 <div class="card block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                     <div data-th-replace="~{message::messagebox}"></div>
-                    <h1 class="text-2xl font-semibold">Add New Contact</h1>
+                    <h1 class="text-2xl font-semibold">Update Contact</h1>
                     <p class="text-gray-500">This contact will be stored on cloud</p>
-                    <form action="" class="mt-8" data-th-action="@{/user/contact/add}" data-th-object="${contactForm}" method="post" enctype="multipart/form-data">
+                    <form  class="mt-8" data-th-action="@{'/user/contact/update/'+${contactId}}" data-th-object="${ContactForm}" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Name</label>
                             <div class="relative mb-1">
@@ -85,16 +85,16 @@
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact image</label>
                             <input id="image_file_input" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" data-th-field="*{contactImage}" type="file">
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
-                            <img class="max-h-52 mx-auto " src="" id="upload_image_preview">
+                            <img data-th-src="*{picture}" class="max-h-52 mx-auto " src="" id="upload_image_preview">
                         </div>
                         <div class="mb-3">
-                        <div class="flex items-center me-4">
-                            <input data-th-field="*{favorite}"  id="green-checkbox" type="checkbox" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="green-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Favourites</label>
-                        </div>
+                            <div class="flex items-center me-4">
+                                <input data-th-field="*{favorite}"  id="green-checkbox" type="checkbox" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="green-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Favourites</label>
+                            </div>
                         </div>
                         <div class="button-container text-center">
-                            <button type="submit" class="px-3 py-2 rounded dark:bg-blue-600 bg-black text-white ">Add contact</button>
+                            <button type="submit" class="px-3 py-2 rounded dark:bg-blue-600 bg-black text-white ">Update contact</button>
                             <button type="reset" class="px-3 py-2 rounded dark:bg-blue-600 bg-black text-white ">Reset</button>
                         </div>
 
@@ -107,7 +107,7 @@
 </div>
 <script data-th-src="@{'/js/admin.js'}"></script>
 <script>
-    console.log("this is add contact page");
+    console.log("this is update page");
 </script>
 </body>
 </html>

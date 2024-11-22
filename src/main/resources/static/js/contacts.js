@@ -1,3 +1,4 @@
+const baseURL="http://localhost:8080";
 const viewContactModal=document.getElementById('view_contact_modal');
 const options = {
     placement: 'bottom-right',
@@ -33,7 +34,7 @@ async function loadContactdata(id)
 {
 console.log(id);
 try{
-    const data=await (await fetch(`http://localhost:8080/api/contacts/${id}`)).json();
+    const data=await (await fetch(`${baseURL}/api/contacts/${id}`)).json();
     console.log(data);
     document.querySelector('#contact_name').innerHTML=data.name;
     document.querySelector('#contact_email').innerHTML=data.email;
@@ -50,8 +51,8 @@ try{
     document.querySelector("#contact_about").innerHTML = data.description;
     document.querySelector("#contact_website").href = data.websiteLink;
     document.querySelector("#contact_website").innerHTML = data.websiteLink;
-    document.querySelector("#contact_linkedIn").href = data.linkedInLink;
-    document.querySelector("#contact_linkedIn").innerHTML = data.linkedInLink;
+    document.querySelector("#contact_linkedIn").href = data.LinkedinLink;
+    document.querySelector("#contact_linkedIn").innerHTML = data.LinkedinLink;
 
     openContactModal()
 
@@ -60,4 +61,23 @@ catch (error)
 {
     console.log(error);
 }
+}
+
+
+async function deleteContact(id)
+{
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = `${baseURL}/user/contact/delete/`+id;
+            window.location.replace(url);
+        }
+    });
 }

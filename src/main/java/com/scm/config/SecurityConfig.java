@@ -1,22 +1,32 @@
 package com.scm.config;
 
 
+import com.scm.helper.Message;
+import com.scm.helper.MessageType;
 import com.scm.services.impl.SecurityCustomUserDeatilService;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
+import java.io.IOException;
 
 
 @EnableWebSecurity
@@ -56,7 +66,19 @@ public class SecurityConfig {
             formLogin.defaultSuccessUrl("/user/profile",true);// Redirect on success
             formLogin.usernameParameter("email");
             formLogin.passwordParameter("password");
-
+            formLogin.failureHandler(new AuthenticationFailureHandler() {
+                @Override
+                public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+                    if(exception instanceof DisabledException) {
+                     HttpSession session=request.getSession();
+                     session.setAttribute("message", Message.builder().content("USer is diabled").type(MessageType.red).build());
+                        response.sendRedirect("/login");
+                    }
+                    else {
+                        response.sendRedirect("/login?error=true");
+                    }
+                }
+            });
 
 //            formLogin.defaultSuccessUrl("/user/dashboard");
 //            formLogin.failureHandler(new AuthenticationFailureHandler() {

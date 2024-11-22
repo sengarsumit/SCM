@@ -34,4 +34,5 @@ public class ContactForm {
     //create annotations for size and resolution
 
     private MultipartFile contactImage;
+    private String picture;
 }

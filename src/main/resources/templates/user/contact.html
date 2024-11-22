@@ -16,6 +16,9 @@
 
 
         <div class="relative  overflow-x-auto shadow-md sm:rounded-lg">
+
+          <div data-th-replace="~{message::messagebox}"> </div>
+
          <form data-th-object="${ContactSearchForm}" data-th-action="@{'/user/contact/search'}">
            <div class="flex  space-x-3 p-5 items-center justify-start flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
              <div>
@@ -84,8 +87,8 @@
 
               <td class="px-6 py-4">
                 <div>
-                  <a><i class="fa-solid w-4 h-4 fa-trash"></i></a>
-                  <a> <i class="fa-solid w-4 h-4 fa-pen-to-square"></i></a>
+                  <button th:onclick="deleteContact([[${c.id}]])"><i class="fa-solid w-4 h-4 fa-trash"></i></button>
+                  <a data-th-href="@{'/user/contact/view/'+*{id}}"> <i class="fa-solid w-4 h-4 fa-pen-to-square"></i></a>
                   <button th:onclick="loadContactdata([[${c.id}]])"><i class="fa-regular w-4 h-4 fa-eye"></i></button>
                 </div>
               </td>

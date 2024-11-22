@@ -28,11 +28,13 @@ public class User implements UserDetails {
     @Column(unique = true,nullable = false)
     private String email;
     private String password;
-    @Column(length = 10000)
+    @Column(length = 1000)
     private String about;
+    @Column(length = 1000)
     private String phoneNumber;
     private String profilePic;
-    private boolean enabled=true;
+    @Getter(value=AccessLevel.NONE)
+    private boolean enabled=false;
     private boolean emailVerified=false;
     private boolean phoneVerified=false;
 
@@ -71,4 +73,9 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
 }
