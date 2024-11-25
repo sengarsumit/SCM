@@ -8,10 +8,54 @@
   <div th:if="${loggedInUser}">
     <div th:replace="~{user/sidebar::sidebar}"></div>
   </div>
-<div class="sm:pl-64 pt-20" style="height: 1000px">
-  <div class="flex items-center justify-center md:pt-32 flex-col">
-  <h1>welcome to profile page</h1>
-  <h2> provieed by sumit</h2>
+<div class="sm:pl-60 pt-20 ">
+  <div class=" md:pt-24 flex-col">
+
+    <div class="dark:bg-gray-900 flex justify-center items-center ">
+    <div class="dark:bg-gray-800 shadow-md rounded-lg border border-blue-700 p-6 w-full max-w-lg mx-auto">
+      <div class="flex justify-center mb-4">
+        <img data-th-src="@{${loggedInUser.profilePic}}"class="w-24 h-24 rounded-full object-cover border-2 dark:border-gray-600" src="{profilePic}" alt="Profile Picture">
+      </div>
+      <div class="text-center mb-4">
+        <h1 data-th-text="${loggedInUser.name}" class="text-2xl font-semibold dark:text-gray-200">{name}</h1>
+        <p data-th-text="${loggedInUser.email}"class="dark:text-gray-400">{email}</p>
+      </div>
+      <div class="flex flex-col dark:text-gray-300 space-y-2">
+        <div class="flex items-center">
+          <span class="w-1/3 font-medium">User ID:</span>
+          <span data-th-text="${loggedInUser.userId}"class="w-2/3">{userId}</span>
+        </div>
+        <div class="flex items-center">
+          <span class="w-1/3 font-medium">Phone:</span>
+          <span data-th-text="${loggedInUser.phoneNumber}"class="w-2/3">{phoneNumber}</span>
+        </div>
+        <div class="flex items-center">
+          <span class="w-1/3 font-medium">About:</span>
+          <span data-th-text="${loggedInUser.about}"class="w-2/3 truncate">{about}</span>
+        </div>
+        <div class="flex items-center">
+          <span class="w-1/3 font-medium">Enabled:</span>
+          <span data-th-text="${loggedInUser.enabled}"class="w-2/3">{enabled ? 'Yes' : 'No'}</span>
+        </div>
+        <div class="flex items-center">
+          <span class="w-1/3 font-medium">Email Verified:</span>
+          <span data-th-text="${loggedInUser.emailVerified}"class="w-2/3">{emailVerified ? 'Yes' : 'No'}</span>
+        </div>
+        <div class="flex items-center">
+          <span class="w-1/3 font-medium">Phone Verified:</span>
+          <span data-th-text="${loggedInUser.phoneVerified}"class="w-2/3">{phoneVerified ? 'Yes' : 'No'}</span>
+        </div>
+        <div class="flex items-center">
+          <span class="w-1/3 font-medium">Provider:</span>
+          <span data-th-text="${loggedInUser.provider}"class="w-2/3">{provider}</span>
+        </div>
+        <div class="flex items-center">
+          <span class="w-1/3 font-medium">Provider ID:</span>
+          <span data-th-text="${loggedInUser.providerUserId}" class="w-2/3">{providerUserId}</span>
+        </div>
+      </div>
+    </div>
+    </div>
   </div>
 </div>
 </div>
